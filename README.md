@@ -4,20 +4,21 @@ This code analyzes the data set for Septa Bus and Rail lines downloaded from htt
 
 ## File Contents
 
-1. **Septa_Data.ipynb**: Python code analyzing the SEPTA data set
-2. **septa_bus_gfts.zip**: Zip file containing text files relating to SEPTA Bus Routes
-3. **septa_rail_gfts.zip**: Zip file containing text files relating to SEPTA Rail Routes
+1. **septa_data.py**: Python code for main program which allows user to explore SEPTA data
+2. **zip_file_processing.py**: Python code reads zip file and converts files to CSV files
+3. **Septa_Data.ipynb**: Python code sample analyzing the SEPTA data set
+4. **septa_bus_gfts.zip**: Zip file containing text files relating to SEPTA Bus Routes
+5. **septa_rail_gfts.zip**: Zip file containing text files relating to SEPTA Rail Routes
 
 All files shall be downloaded in the same directory.  ZIP file contents do not have to be extracted.
 
 ## Running the code
 
-This repository contains a Jupyter Notebook file containing Python 3.6 code.
+Open **septa_data.py** in any directory and run the program.
 
-Jupyter Notebook can be installed from [here](http://jupyter.org/).  Alternatively, install [Anaconda](https://www.continuum.io/downloads) and then launch Notebook from Anaconda.  Install for Python 3.X series.
+## Jupyter Notebook
 
-Open Jupyter Notebook and open **Septa_Data.ipynb**.
+You can also load and run the Jupyter Notebook in order to explore the data set.  Jupyter Notebook can be installed from [here](http://jupyter.org/).  Alternatively, install [Anaconda](https://www.continuum.io/downloads) and then launch Notebook from Anaconda.  Install for Python 3.X series.
 
-Starting with the first Markdown block, hit `Shift-Enter` for each block to run the code.
-
-After running the code, go to `File -> Download As -> HTML`.  An HTML file will be created like the one in this repository.
+1. Open Jupyter Notebook and open **Septa_Data.ipynb**.
+2. Starting with the first Markdown block, hit `Shift-Enter` for each block to run the code.

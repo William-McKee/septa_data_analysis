@@ -6,9 +6,10 @@ This code analyzes the data set for Septa Bus and Rail lines downloaded from htt
 
 1. **septa_data.py**: Python code for main program which allows user to explore SEPTA data
 2. **zip_file_processing.py**: Python code reads zip file and converts files to CSV files
-3. **Septa_Data.ipynb**: Python code sample analyzing the SEPTA data set
-4. **septa_bus_gfts.zip**: Zip file containing text files relating to SEPTA Bus Routes
-5. **septa_rail_gfts.zip**: Zip file containing text files relating to SEPTA Rail Routes
+3. **septa_gui.py**: Python code handling GUI setup and events
+4. **Septa_Data.ipynb**: Python code sample analyzing the SEPTA data set
+5. **septa_bus_gfts.zip**: Zip file containing text files relating to SEPTA Bus Routes
+6. **septa_rail_gfts.zip**: Zip file containing text files relating to SEPTA Rail Routes
 
 All files shall be downloaded in the same directory.  ZIP file contents do not have to be extracted.
 

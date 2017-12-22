@@ -6,6 +6,7 @@ Main Program
 """
 
 from zip_file_processing import process_zip_files
+from septa_gui import Septa_Gui_Frame
 
 # Convert zip file contents to CSV
 num_lines = 5
@@ -16,4 +17,9 @@ if __debug__:
     print("Directory List:")
     print(directory_names)
 
-# TODO: Add GUI
+# Build Septa Gui
+import tkinter as tk
+
+root = tk.Tk()
+septa_gui = Septa_Gui_Frame(root)
+septa_gui.mainloop()

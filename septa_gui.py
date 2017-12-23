@@ -59,8 +59,7 @@ class Septa_Gui_Frame(tk.Frame):
         self.septa_scrollbar.pack(side="right", fill="y")
         self.septa_listbox.config(yscrollcommand=self.septa_scrollbar.set, 
                                   selectmode=tk.EXTENDED, height=20, width=40)
-
-
+        
     def LoadListbox(self):
         '''
         Load Listbox with bus or rail lines based on radio button choice
@@ -68,6 +67,9 @@ class Septa_Gui_Frame(tk.Frame):
         '''
         # Clear previous contets
         self.septa_listbox.delete(0, "end")
+        
+        # CSV file to read
+        csv_file_name = 'routes.csv'
                 
         # Check for Bus or Rail
         if (self.transport_selection.get() == 0):                     # === Bus
@@ -76,18 +78,6 @@ class Septa_Gui_Frame(tk.Frame):
             
             # Change directory
             os.chdir('septa_bus_gfts')
-            
-            # Get bus routes
-            # TODO: Function for repeating code block
-            routes_data_list = []
-            with open('routes.csv', 'r') as f:
-                reader = csv.reader(f)
-                next(reader, None)  # skip the headers
-                routes_data_list = sorted(list(reader), key=itemgetter(FIELD_WANTED_INDEX))
-            
-            # We only need one column for Listbox
-            for item in routes_data_list:
-                self.septa_listbox.insert("end", item[FIELD_WANTED_INDEX])
                 
         else:                                                        # === Rail
             # Specify index
@@ -96,16 +86,25 @@ class Septa_Gui_Frame(tk.Frame):
             # Change directory
             os.chdir('septa_rail_gfts')
             
-            # Get train routes
-            routes_data_list = []
-            with open('routes.csv', 'r') as f:
-                reader = csv.reader(f)
-                next(reader, None)  # skip the headers
-                routes_data_list = sorted(list(reader), key=itemgetter(FIELD_WANTED_INDEX))
-
-            # We only need one column for Listbox
-            for item in routes_data_list:
-                self.septa_listbox.insert("end", item[FIELD_WANTED_INDEX])
+        # Load bus or train routes
+        self.LoadListboxItemsFromCsvFile(self.septa_listbox, csv_file_name, FIELD_WANTED_INDEX)
         
         # Change back to original directory        
         os.chdir('..')
+        
+    def LoadListboxItemsFromCsvFile(self, listbox_control, csv_file_name, sort_index):
+        '''
+        Read CSV File and Load Listbox based on sorting index
+        listbox_control = Listbox to be loaded with items
+        csv_file_name   = CSV file containing rows to be loaded
+        sort_index      = Index of CSV file column containing items
+        '''
+        routes_data_list = []
+        with open(csv_file_name, 'r') as f:
+            reader = csv.reader(f)
+            next(reader, None)  # skip the headers
+            routes_data_list = sorted(list(reader), key=itemgetter(sort_index))
+            
+        # We only need one column for Listbox
+        for item in routes_data_list:
+            listbox_control.insert("end", item[sort_index])

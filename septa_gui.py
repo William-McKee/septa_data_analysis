@@ -13,10 +13,15 @@ import os
 class Septa_Gui_Frame(tk.Frame):
     '''Septa Gui'''
     
-    def __init__(self,parent=None):
-        '''Build Septa Gui'''
+    def __init__(self, directory_list, parent=None):
+        '''
+        Build Septa Gui
+        parent = parent control
+        directory_list = directory list containing bus then rail directory
+        '''
         # Save initial grame
         self.root = tk.Frame.__init__(self,parent)
+        self.directory_list = directory_list
         self.parent = parent
         
         # Initial window settings
@@ -63,7 +68,6 @@ class Septa_Gui_Frame(tk.Frame):
     def LoadListbox(self):
         '''
         Load Listbox with bus or rail lines based on radio button choice
-        TODO: Pass directories into this class
         '''
         # Clear previous contets
         self.septa_listbox.delete(0, "end")
@@ -77,14 +81,14 @@ class Septa_Gui_Frame(tk.Frame):
             FIELD_WANTED_INDEX = 2   # 'route_long_name'
             
             # Change directory
-            os.chdir('septa_bus_gfts')
+            os.chdir(self.directory_list[0])
                 
         else:                                                        # === Rail
             # Specify index
             FIELD_WANTED_INDEX = 1  # 'route_short_name'
             
             # Change directory
-            os.chdir('septa_rail_gfts')
+            os.chdir(self.directory_list[1])
             
         # Load bus or train routes
         self.LoadListboxItemsFromCsvFile(self.septa_listbox, csv_file_name, FIELD_WANTED_INDEX)

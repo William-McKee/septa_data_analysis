@@ -21,5 +21,5 @@ if __debug__:
 import tkinter as tk
 
 root = tk.Tk()
-septa_gui = Septa_Gui_Frame(root)
+septa_gui = Septa_Gui_Frame(directory_names, root)
 septa_gui.mainloop()

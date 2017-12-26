@@ -44,33 +44,33 @@ class Septa_Gui_Frame(tk.Frame):
                            text=language,
                            padx = 20, 
                            variable=self.transport_selection, 
-                           command=self.LoadListbox,
+                           command=self.LoadRoutesListbox,
                            value=val).pack(anchor=tk.W)
             
         # Create label for Listbox
-        self.septa_listbox_label = tk.Label(self.root, 
-                                            text="Route Names:",
-                                            justify = tk.LEFT).pack()
+        self.septa_routes_frame_label = tk.Label(self.root, 
+                                                 text="Route Names:",
+                                                 justify = tk.LEFT).pack()
             
         # Create Frame for Listbox            
-        self.septa_listbox_frame = tk.Frame(self.root)
-        self.septa_listbox_frame.pack()
+        self.septa_routes_frame = tk.Frame(self.root)
+        self.septa_routes_frame.pack()
 
         # Create and link listbox and scrollbar
-        self.septa_listbox = tk.Listbox(self.septa_listbox_frame, width=20, height=10)
-        self.septa_listbox.pack(side="left", fill="y")
-        self.septa_scrollbar = tk.Scrollbar(self.septa_listbox_frame, orient="vertical")
-        self.septa_scrollbar.config(command=self.septa_listbox.yview)
-        self.septa_scrollbar.pack(side="right", fill="y")
-        self.septa_listbox.config(yscrollcommand=self.septa_scrollbar.set, 
-                                  selectmode=tk.EXTENDED, height=20, width=40)
+        self.septa_routes_listbox = tk.Listbox(self.septa_routes_frame, width=20, height=10)
+        self.septa_routes_listbox.pack(side="left", fill="y")
+        self.septa_routes_scrollbar = tk.Scrollbar(self.septa_routes_frame, orient="vertical")
+        self.septa_routes_scrollbar.config(command=self.septa_routes_listbox.yview)
+        self.septa_routes_scrollbar.pack(side="right", fill="y")
+        self.septa_routes_listbox.config(yscrollcommand=self.septa_routes_scrollbar.set, 
+                                         height=20, width=40)
         
-    def LoadListbox(self):
+    def LoadRoutesListbox(self):
         '''
         Load Listbox with bus or rail lines based on radio button choice
         '''
         # Clear previous contets
-        self.septa_listbox.delete(0, "end")
+        self.septa_routes_listbox.delete(0, "end")
         
         # CSV file to read
         csv_file_name = 'routes.csv'
@@ -91,7 +91,7 @@ class Septa_Gui_Frame(tk.Frame):
             os.chdir(self.directory_list[1])
             
         # Load bus or train routes
-        self.LoadListboxItemsFromCsvFile(self.septa_listbox, csv_file_name, FIELD_WANTED_INDEX)
+        self.LoadListboxItemsFromCsvFile(self.septa_routes_listbox, csv_file_name, FIELD_WANTED_INDEX)
         
         # Change back to original directory        
         os.chdir('..')

@@ -46,17 +46,17 @@ class Septa_Gui_Frame(tk.Frame):
                            variable=self.transport_selection, 
                            command=self.LoadRoutesListbox,
                            value=val).pack(anchor=tk.W)
-            
-        # Create label for Listbox
-        self.septa_routes_frame_label = tk.Label(self.root, 
-                                                 text="Route Names:",
-                                                 justify = tk.LEFT).pack()
-            
-        # Create Frame for Listbox            
+                       
+        # Create Frame for Routes Listbox            
         self.septa_routes_frame = tk.Frame(self.root)
         self.septa_routes_frame.pack()
+        
+        # Create Label for Routes Listbox
+        self.septa_routes_frame_label = tk.Label(self.septa_routes_frame, 
+                                                 text="Route Names:",
+                                                 justify = tk.LEFT).pack()
 
-        # Create and link listbox and scrollbar
+        # Create and link Routes Listbox and Scrollbar
         self.septa_routes_listbox = tk.Listbox(self.septa_routes_frame, width=20, height=10)
         self.septa_routes_listbox.pack(side="left", fill="y")
         self.septa_routes_scrollbar = tk.Scrollbar(self.septa_routes_frame, orient="vertical")

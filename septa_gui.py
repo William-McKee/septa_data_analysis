@@ -26,35 +26,36 @@ class Septa_Gui_Frame(tk.Frame):
         
         # Initial window settings
         self.winfo_toplevel().title("SEPTA Data Exploration")
-        self.winfo_toplevel().geometry('700x450')
+        self.winfo_toplevel().geometry('925x450')
         
         # Radio Button Settings
         self.transport_choices = ["Bus", "Rail"]
         self.transport_selection = tk.IntVar()
         self.transport_selection.set(0)
         
+        # Keep track of grid rows
+        grid_row = 0
+        
         # Create Label for transportation choices
-        self.septa_transport_label = tk.Label(self.root, 
-                                              text="Select Transportation Type:",
-                                              justify = "left").pack()
+        self.septa_transport_label = tk.Label(self.root, text="Select Transportation Type:")
+        self.septa_transport_label.grid(row=grid_row, column=0, sticky="w", padx=10)
         
         # Add transportation choices radio buttons
+        grid_row += 1
         for val, language in enumerate(self.transport_choices):
-            tk.Radiobutton(self.root, 
-                           text=language,
-                           padx = 20, 
-                           variable=self.transport_selection, 
-                           command=self.LoadRoutesListbox,
-                           value=val).pack(anchor=tk.W)
+            thisRb = tk.Radiobutton(self.root, text=language, padx = 20, variable=self.transport_selection, 
+                           command=self.LoadRoutesListbox, value=val)
+            thisRb.grid(row=grid_row, column=0, sticky="w")
+            grid_row += 1
                        
         # Create Frame for Routes Listbox            
         self.septa_routes_frame = tk.Frame(self.root)
-        self.septa_routes_frame.pack(side="left", padx=20)
+        self.septa_routes_frame.grid(row=grid_row, column=0, padx=10)
         
         # Create Label for Routes Listbox
         self.septa_routes_frame_label = tk.Label(self.septa_routes_frame, 
                                                  text="Route Names:",
-                                                 justify = tk.LEFT).pack()
+                                                 justify = "left").pack()
 
         # Create and link Routes Listbox and Scrollbar
         self.septa_routes_listbox = tk.Listbox(self.septa_routes_frame, width=20, height=10)
@@ -68,21 +69,21 @@ class Septa_Gui_Frame(tk.Frame):
         # TODO: One function for Routes and Schedule Frames
         # Create Frame for Schedules ListBox
         self.septa_schedules_frame = tk.Frame(self.root)
-        self.septa_schedules_frame.pack(side="left")
+        self.septa_schedules_frame.grid(row=grid_row, column=1, padx=10)
         
         # Create Label for Schedules Listbox
         self.septa_schedules_frame_label = tk.Label(self.septa_schedules_frame, 
                                                     text="Schedules:",
-                                                    justify = tk.LEFT).pack()
+                                                    justify = "left").pack()
         
         # Create and link Schedule Listbox and Scrollbar
-        self.septa_schedules_listbox = tk.Listbox(self.septa_schedules_frame, width=300, height=10)
+        self.septa_schedules_listbox = tk.Listbox(self.septa_schedules_frame, width=20, height=10)
         self.septa_schedules_listbox.pack(side="left", fill="y")
         self.septa_schedules_scrollbar = tk.Scrollbar(self.septa_schedules_frame, orient="vertical")
         self.septa_schedules_scrollbar.config(command=self.septa_schedules_listbox.yview)
         self.septa_schedules_scrollbar.pack(side="right", fill="y")
         self.septa_schedules_listbox.config(yscrollcommand=self.septa_schedules_scrollbar.set, 
-                                           height=20, width=40)
+                                           height=20, width=100)
         
     def LoadRoutesListbox(self):
         '''

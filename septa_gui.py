@@ -63,7 +63,7 @@ class Septa_Gui_Frame(tk.Frame):
         self.septa_routes_scrollbar = tk.Scrollbar(self.septa_routes_frame, orient="vertical")
         self.septa_routes_scrollbar.config(command=self.septa_routes_listbox.yview)
         self.septa_routes_scrollbar.pack(side="right", fill="y")
-        self.septa_routes_listbox.config(yscrollcommand=self.septa_routes_scrollbar.set, 
+        self.septa_routes_listbox.config(yscrollcommand=self.septa_routes_scrollbar.set,
                                          height=20, width=40)
         self.septa_routes_listbox.bind('<<ListboxSelect>>', self.LoadSchedules)
         
@@ -86,6 +86,7 @@ class Septa_Gui_Frame(tk.Frame):
         self.septa_schedules_listbox.config(yscrollcommand=self.septa_schedules_scrollbar.set, 
                                            height=20, width=100)
         self.septa_schedules_listbox.bind('<<ListboxSelect>>', self.LoadMap)
+        self.MAP_LOAD = 0
         
     def LoadRoutesListbox(self):
         '''
@@ -140,32 +141,36 @@ class Septa_Gui_Frame(tk.Frame):
         Load Schedule for selected train or bus line
         event = event object provided by Tkinter
         '''
+        
         # Clear previous contents
         self.septa_schedules_listbox.delete(0, "end")
-        
-        # Get selected item
-        w = event.widget
-        index = int(w.curselection()[0])
-        value = w.get(index)
-        print('You selected item %d: "%s"' % (index, value))
+            
+        if (self.MAP_LOAD): # LoadMap invoked do not proceed here! TODO: Cleaner resolution of this issue?
+            # Clear Loaded Map
+            self.MAP_LOAD = 0
+        else:  
+            # Get selected item
+            w = event.widget
+            index = int(w.curselection()[0])
+            value = w.get(index)
+            print('You selected item %d: "%s"' % (index, value))
 
-        # TODO: Load Schedules
-        # Load Dummy Contents for now
-        items = ['January', 'February', 'March', 'April', 'May', 'June',
-                 'July', 'August', 'September', 'October', 'November', 'December']
-        for item in items:
-            self.septa_schedules_listbox.insert("end", item)
+            # TODO: Load Schedules
+            # Load Dummy Contents for now
+            items = ['January', 'February', 'March', 'April', 'May', 'June',
+                     'July', 'August', 'September', 'October', 'November', 'December']
+            for item in items:
+                self.septa_schedules_listbox.insert("end", item)
             
     def LoadMap(self, event):
         '''
         Load Map for selected train or bus schedule
         event = event object provided by Tkinter
         '''
-        
         # TODO: Load Map
         # Get selected item
         w = event.widget
         index = int(w.curselection()[0])
         value = w.get(index)
         print('You selected item %d: "%s"' % (index, value))
-        
+        self.MAP_LOAD = 1

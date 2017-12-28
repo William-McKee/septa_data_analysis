@@ -47,46 +47,60 @@ class Septa_Gui_Frame(tk.Frame):
                            command=self.LoadRoutesListbox, value=val)
             thisRb.grid(row=grid_row, column=0, sticky="w")
             grid_row += 1
-                       
-        # Create Frame for Routes Listbox            
-        self.septa_routes_frame = tk.Frame(self.root)
-        self.septa_routes_frame.grid(row=grid_row, column=0, padx=10)
+            
+        # Routes Listbox construction
+        self.septa_routes_frame = tk.Frame()
+        self.septa_routes_frame_label = tk.Label()
+        self.septa_routes_listbox = tk.Listbox()
+        self.septa_routes_scrollbar = tk.Scrollbar()
+        self.septa_routes_frame, self.septa_routes_frame_label, self.septa_routes_listbox, self.septa_routes_scrollbar = \
+            self.BuildListboxFrame(self.septa_routes_frame,
+                               self.septa_routes_frame_label, 
+                               self.septa_routes_listbox, 
+                               self.septa_routes_scrollbar, 
+                               self.LoadSchedules,
+                               "Route Names:", grid_row, 0, 20, 40)
         
-        # Create Label for Routes Listbox
-        self.septa_routes_frame_label = tk.Label(self.septa_routes_frame, 
-                                                 text="Route Names:",
-                                                 justify = "left").pack()
-
-        # Create and link Routes Listbox and Scrollbar
-        self.septa_routes_listbox = tk.Listbox(self.septa_routes_frame, width=20, height=10)
-        self.septa_routes_listbox.pack(side="left", fill="y")
-        self.septa_routes_scrollbar = tk.Scrollbar(self.septa_routes_frame, orient="vertical")
-        self.septa_routes_scrollbar.config(command=self.septa_routes_listbox.yview)
-        self.septa_routes_scrollbar.pack(side="right", fill="y")
-        self.septa_routes_listbox.config(yscrollcommand=self.septa_routes_scrollbar.set,
-                                         height=20, width=40)
-        self.septa_routes_listbox.bind('<<ListboxSelect>>', self.LoadSchedules)
-        
-        # TODO: One function for Routes and Schedule Frames
-        # Create Frame for Schedules ListBox
-        self.septa_schedules_frame = tk.Frame(self.root)
-        self.septa_schedules_frame.grid(row=grid_row, column=1, padx=10)
-        
-        # Create Label for Schedules Listbox
-        self.septa_schedules_frame_label = tk.Label(self.septa_schedules_frame, 
-                                                    text="Schedules:",
-                                                    justify = "left").pack()
-        
-        # Create and link Schedule Listbox and Scrollbar
-        self.septa_schedules_listbox = tk.Listbox(self.septa_schedules_frame, width=20, height=10)
-        self.septa_schedules_listbox.pack(side="left", fill="y")
-        self.septa_schedules_scrollbar = tk.Scrollbar(self.septa_schedules_frame, orient="vertical")
-        self.septa_schedules_scrollbar.config(command=self.septa_schedules_listbox.yview)
-        self.septa_schedules_scrollbar.pack(side="right", fill="y")
-        self.septa_schedules_listbox.config(yscrollcommand=self.septa_schedules_scrollbar.set, 
-                                           height=20, width=100)
-        self.septa_schedules_listbox.bind('<<ListboxSelect>>', self.LoadMap)
+        # Schedules Listbox construction
+        self.septa_schedules_frame = tk.Frame()
+        self.septa_schedules_frame_label = tk.Label()
+        self.septa_schedules_listbox = tk.Listbox()
+        self.septa_schedules_scrollbar = tk.Scrollbar()
+        self.septa_schedules_frame, self.septa_schedules_frame_label, self.septa_schedules_listbox, self.septa_schedules_scrollbar = \
+            self.BuildListboxFrame(self.septa_schedules_frame,
+                               self.septa_schedules_frame_label, 
+                               self.septa_schedules_listbox, 
+                               self.septa_schedules_scrollbar, 
+                               self.LoadMap,
+                               "Schedules:", grid_row, 1, 20, 100)
+            
+        # LoadSchedules/LoadMap flag
         self.MAP_LOAD = 0
+        
+    def BuildListboxFrame(self, our_frame, our_label, our_listbox, our_scrollbar, 
+                          callback_function, our_labeltext, grid_row, grid_column,
+                          our_scrollbar_height, our_scrollbar_width):
+        '''
+        TODO: Fill in description
+        '''
+        # Create frame
+        our_frame = tk.Frame(self.root)
+        our_frame.grid(row=grid_row, column=grid_column, padx=10)
+        
+        # Create label for listbox
+        our_label = tk.Label(our_frame, text=our_labeltext, justify = "left").pack()
+
+        # Create and link listbox and scrollbar
+        our_listbox = tk.Listbox(our_frame, width=20, height=10)
+        our_listbox.pack(side="left", fill="y")
+        our_scrollbar = tk.Scrollbar(our_frame, orient="vertical")
+        our_scrollbar.config(command=our_listbox.yview)
+        our_scrollbar.pack(side="right", fill="y")
+        our_listbox.config(yscrollcommand=our_scrollbar.set,
+                           height=our_scrollbar_height,
+                           width=our_scrollbar_width)
+        our_listbox.bind('<<ListboxSelect>>', callback_function)
+        return our_frame, our_label, our_listbox, our_scrollbar
         
     def LoadRoutesListbox(self):
         '''
@@ -144,8 +158,9 @@ class Septa_Gui_Frame(tk.Frame):
         
         # Clear previous contents
         self.septa_schedules_listbox.delete(0, "end")
-            
-        if (self.MAP_LOAD): # LoadMap invoked do not proceed here! TODO: Cleaner resolution of this issue?
+        
+        # TODO: Cleaner resolution of this issue?
+        if (self.MAP_LOAD): # LoadMap invoked do not proceed here!
             # Clear Loaded Map
             self.MAP_LOAD = 0
         else:  

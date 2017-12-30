@@ -124,34 +124,44 @@ class Septa_Gui_Frame(tk.Frame):
         
         # CSV file to read
         csv_file_name = 'routes.csv'
+        
+        # Initialize
+        sort_index = -1
+        show_index_list = []
                 
         # Check for Bus or Rail
         if (self.transport_selection.get() == 0):                     # === Bus
             # Specify index
-            FIELD_WANTED_INDEX = 2  # 'route_long_name'
+            sort_index = 0                # 'route_id'
+            show_index_list.append(0)     # 'route_id'
+            show_index_list.append(2)     # 'route_long_name'
             
             # Change directory
             os.chdir(self.directory_list[0])
                 
         else:                                                        # === Rail
             # Specify index
-            FIELD_WANTED_INDEX = 1  # 'route_short_name'
+            sort_index = 1                # 'route_short_name'
+            show_index_list.append(1)     # 'route_short_name'
             
             # Change directory
             os.chdir(self.directory_list[1])
             
         # Load bus or train routes
-        self.LoadListboxItemsFromCsvFile(self.septa_routes_listbox, csv_file_name, FIELD_WANTED_INDEX)
+        self.LoadListboxItemsFromCsvFile(self.septa_routes_listbox, csv_file_name, 
+                                         sort_index, show_index_list)
         
         # Change back to original directory        
         os.chdir('..')
         
-    def LoadListboxItemsFromCsvFile(self, listbox_control, csv_file_name, sort_index):
+    def LoadListboxItemsFromCsvFile(self, listbox_control, csv_file_name, 
+                                    sort_index, show_index_list):
         '''
         Read CSV File and Load Listbox based on sorting index
         listbox_control = Listbox to be loaded with items
         csv_file_name   = CSV file containing rows to be loaded
-        sort_index      = Index of CSV file column containing items
+        sort_index      = Sort items by this CSV column index
+        show_index_list = List of CSV column indexes to show in Listbox
         '''
         routes_data_list = []
         with open(csv_file_name, 'r') as f:
@@ -159,9 +169,12 @@ class Septa_Gui_Frame(tk.Frame):
             next(reader, None)  # skip the headers
             routes_data_list = sorted(list(reader), key=itemgetter(sort_index))
             
-        # We only need one column for Listbox
+        # Show only the specified items from index list
         for item in routes_data_list:
-            listbox_control.insert("end", item[sort_index])
+            item_to_insert = ""
+            for index in show_index_list:
+                item_to_insert += item[index] + "  "
+            listbox_control.insert("end", item_to_insert.strip())
             
     def LoadSchedules(self, event):
         '''

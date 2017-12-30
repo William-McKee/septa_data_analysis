@@ -79,9 +79,22 @@ class Septa_Gui_Frame(tk.Frame):
         
     def BuildListboxFrame(self, our_frame, our_label, our_listbox, our_scrollbar, 
                           callback_function, our_labeltext, grid_row, grid_column,
-                          our_scrollbar_height, our_scrollbar_width):
+                          our_listbox_height, our_listbox_width):
         '''
-        TODO: Fill in description
+        Add Frame to GUI.  Frame contains label, listbox, and associated scrollbar.
+        
+        our_frame = Frame widget object
+        our_label = Label widget object
+        our_listbox = Listbox widget object
+        our_scrollbar = Scrollbar widget object
+        callback_function = Function called when user clicks listbox entry
+        our_labeltext = Label Text
+        grid_row = Frame's grid row location
+        grid_column = Frame's grid column location
+        our_listbox_height = Height of listbox widget
+        our_listbox_width = Width of listbox widget
+        
+        Returns newly added Frame, Label, Listbox, and Scrollbar widgets
         '''
         # Create frame
         our_frame = tk.Frame(self.root)
@@ -97,8 +110,8 @@ class Septa_Gui_Frame(tk.Frame):
         our_scrollbar.config(command=our_listbox.yview)
         our_scrollbar.pack(side="right", fill="y")
         our_listbox.config(yscrollcommand=our_scrollbar.set,
-                           height=our_scrollbar_height,
-                           width=our_scrollbar_width)
+                           height=our_listbox_height,
+                           width=our_listbox_width)
         our_listbox.bind('<<ListboxSelect>>', callback_function)
         return our_frame, our_label, our_listbox, our_scrollbar
         

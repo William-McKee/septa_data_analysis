@@ -26,9 +26,9 @@ class Septa_Gui_Frame(tk.Frame):
         
         # Initial window settings
         self.winfo_toplevel().title("SEPTA Data Exploration")
-        self.winfo_toplevel().geometry('925x450')
+        self.winfo_toplevel().geometry('650x800')
         
-        # Radio Button Settings
+        # Transport Choice Radio Button Settings
         self.transport_choices = ["Bus", "Rail"]
         self.transport_selection = tk.IntVar()
         self.transport_selection.set(0)
@@ -60,8 +60,28 @@ class Septa_Gui_Frame(tk.Frame):
                                self.septa_routes_scrollbar, 
                                self.LoadSchedules,
                                "Route Names:", grid_row, 0, 20, 40)
+            
+        # Create Direction Frame
+        #self.septa_direction_frame = tk.Frame(self.root)
+        #self.septa_direction_frame.grid(row=grid_row, column=1, padx=10)
+        
+        # Create Direction Label
+        self.septa_direction_frame_label = tk.Label(self.septa_routes_frame, text="Choose Direction:")
+        self.septa_direction_frame_label.pack(side=tk.TOP, anchor=tk.NE, padx=10)
+        
+        # Create Direction Dropdown
+        # TODO: Set to CSV file values for selected route
+        directions = ["North", "Northeast", "East", "Southeast", 
+                      "South", "Southwest", "West", "Northwest"]
+        direction_default = tk.StringVar()
+        direction_default.set("North")
+
+        self.septa_default_value = "North"
+        self.septa_direction_dropdown = tk.OptionMenu(self.septa_routes_frame, direction_default, *directions)
+        self.septa_direction_dropdown.pack(side=tk.TOP, anchor=tk.E, padx=10)
         
         # Schedules Listbox construction
+        grid_row += 1
         self.septa_schedules_frame = tk.Frame()
         self.septa_schedules_frame_label = tk.Label()
         self.septa_schedules_listbox = tk.Listbox()
@@ -72,7 +92,7 @@ class Septa_Gui_Frame(tk.Frame):
                                self.septa_schedules_listbox, 
                                self.septa_schedules_scrollbar, 
                                self.LoadMap,
-                               "Schedules:", grid_row, 1, 20, 100)
+                               "Schedules:", grid_row, 0, 20, 100)
             
         # LoadSchedules/LoadMap flag
         self.MAP_LOAD = 0
@@ -98,17 +118,20 @@ class Septa_Gui_Frame(tk.Frame):
         '''
         # Create frame
         our_frame = tk.Frame(self.root)
-        our_frame.grid(row=grid_row, column=grid_column, padx=10)
+        our_frame.grid(row=grid_row, column=grid_column, padx=10, sticky=tk.W)
         
         # Create label for listbox
-        our_label = tk.Label(our_frame, text=our_labeltext, justify = "left").pack()
+        # our_label = tk.Label(our_frame, text=our_labeltext, justify = "left").pack()
+        our_label = tk.Label(our_frame, text=our_labeltext)
+        #our_label.place(rely=0.0, relx=0.0, x=0, y=0, anchor=tk.NW)
+        our_label.pack(side=tk.TOP, anchor=tk.W)
 
         # Create and link listbox and scrollbar
         our_listbox = tk.Listbox(our_frame, width=20, height=10)
-        our_listbox.pack(side="left", fill="y")
+        our_listbox.pack(side=tk.LEFT, anchor=tk.W, fill="y")
         our_scrollbar = tk.Scrollbar(our_frame, orient="vertical")
         our_scrollbar.config(command=our_listbox.yview)
-        our_scrollbar.pack(side="right", fill="y")
+        our_scrollbar.pack(side=tk.LEFT, fill="y")
         our_listbox.config(yscrollcommand=our_scrollbar.set,
                            height=our_listbox_height,
                            width=our_listbox_width)

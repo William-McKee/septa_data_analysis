@@ -141,7 +141,8 @@ class Septa_Gui_Frame(tk.Frame):
                 
         else:                                                        # === Rail
             # Specify index
-            sort_index = 1                # 'route_short_name'
+            sort_index = 0                # 'route_short_name'
+            show_index_list.append(0)     # 'route_id'
             show_index_list.append(1)     # 'route_short_name'
             
             # Change directory

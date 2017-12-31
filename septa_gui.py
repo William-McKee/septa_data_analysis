@@ -28,7 +28,7 @@ class Septa_Gui_Frame(tk.Frame):
         self.winfo_toplevel().title("SEPTA Data Exploration")
         self.winfo_toplevel().geometry('650x800')
         
-        # Transport Choice Radio Button Settings
+        # Transport choice radio button settings
         self.transport_choices = ["Bus", "Rail"]
         self.transport_selection = tk.IntVar()
         self.transport_selection.set(0)
@@ -36,14 +36,14 @@ class Septa_Gui_Frame(tk.Frame):
         # Keep track of grid rows
         grid_row = 0
         
-        # Create Label for transportation choices
+        # Create label for transportation choices
         self.septa_transport_label = tk.Label(self.root, text="Select Transportation Type:")
         self.septa_transport_label.grid(row=grid_row, column=0, sticky="w", padx=10)
         
         # Add transportation choices radio buttons
         grid_row += 1
         for val, language in enumerate(self.transport_choices):
-            thisRb = tk.Radiobutton(self.root, text=language, padx = 20, variable=self.transport_selection, 
+            thisRb = tk.Radiobutton(self.root, text=language, padx=20, variable=self.transport_selection, 
                            command=self.LoadRoutesListbox, value=val)
             thisRb.grid(row=grid_row, column=0, sticky="w")
             grid_row += 1
@@ -60,16 +60,12 @@ class Septa_Gui_Frame(tk.Frame):
                                self.septa_routes_scrollbar, 
                                self.LoadSchedules,
                                "Route Names:", grid_row, 0, 20, 40)
-            
-        # Create Direction Frame
-        #self.septa_direction_frame = tk.Frame(self.root)
-        #self.septa_direction_frame.grid(row=grid_row, column=1, padx=10)
         
-        # Create Direction Label
+        # Create Direction label
         self.septa_direction_frame_label = tk.Label(self.septa_routes_frame, text="Choose Direction:")
         self.septa_direction_frame_label.pack(side=tk.TOP, anchor=tk.NE, padx=10)
         
-        # Create Direction Dropdown
+        # Create Direction dropdown
         # TODO: Set to CSV file values for selected route
         directions = ["North", "Northeast", "East", "Southeast", 
                       "South", "Southwest", "West", "Northwest"]
@@ -79,6 +75,23 @@ class Septa_Gui_Frame(tk.Frame):
         self.septa_default_value = "North"
         self.septa_direction_dropdown = tk.OptionMenu(self.septa_routes_frame, direction_default, *directions)
         self.septa_direction_dropdown.pack(side=tk.TOP, anchor=tk.E, padx=10)
+        
+        # Create days radio button settings
+        self.day_choices = ["Weekday", "Saturday", "Sunday"]
+        self.day_selection = tk.IntVar()
+        self.day_selection.set(0)
+        
+        # Create label for day choices
+        self.septa_transport_label = tk.Label(self.septa_routes_frame, text="Select Day:")
+        self.septa_transport_label.pack(side=tk.TOP, anchor=tk.W, padx=10, pady=(120, 0))
+        
+        # Add day choices radio buttons
+        for val, language in enumerate(self.day_choices):
+            thisRb = tk.Radiobutton(self.septa_routes_frame, text=language, variable=self.day_selection, value=val) 
+            # TODO: command=self.<Function>LoadRoutesListbox
+            thisRb.pack(side=tk.TOP, anchor=tk.W)
+        
+        
         
         # Schedules Listbox construction
         grid_row += 1

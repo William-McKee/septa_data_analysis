@@ -61,36 +61,20 @@ class Septa_Gui_Frame(tk.Frame):
                                self.LoadDirectionalBox,
                                "Route Names:", grid_row, 0, 20, 40)
         
-        # Create Direction label
-        self.septa_direction_frame_label = tk.Label(self.septa_routes_frame, text="Choose Direction:")
-        self.septa_direction_frame_label.pack(side=tk.TOP, anchor=tk.NE, padx=10)
-        
-        # Create Direction dropdown (dummy loaded here; proper headings loaded for selected route)
-        DUMMY_DIRECTION = "Last Stop"
-        directions_dummy = [DUMMY_DIRECTION]
-        direction_default = tk.StringVar()
-        direction_default.set(DUMMY_DIRECTION)
-
-        self.septa_default_value = DUMMY_DIRECTION
-        self.septa_direction_dropdown = tk.OptionMenu(self.septa_routes_frame, direction_default, *directions_dummy)
-        self.septa_direction_dropdown.pack(side=tk.TOP, anchor=tk.E, padx=10)
+        # Create Dummy Direction label
+        self.septa_direction_frame_label = tk.Label()
         
         # Create days radio button settings
-        self.day_choices = ["Weekday", "Saturday", "Sunday"]
         self.day_selection = tk.IntVar()
         self.day_selection.set(0)
         
-        # Create label for day choices
-        self.septa_transport_label = tk.Label(self.septa_routes_frame, text="Select Day:")
-        self.septa_transport_label.pack(side=tk.TOP, anchor=tk.W, padx=10, pady=(120, 0))
+        # Create Dummy label for day choices
+        self.septa_transport_label = tk.Label()
         
-        # Add day choices radio buttons
-        for val, language in enumerate(self.day_choices):
-            thisRb = tk.Radiobutton(self.septa_routes_frame, text=language, variable=self.day_selection, value=val) 
-            # TODO: command=self.<Function>LoadRoutesListbox
-            thisRb.pack(side=tk.TOP, anchor=tk.W)
-        
-        
+        # Create Dummy Days Radio Button (Assume Weekday, Saturday, Sunday choices)
+        self.septa_days_radiobutton_weekday = tk.Radiobutton()
+        self.septa_days_radiobutton_saturday = tk.Radiobutton()
+        self.septa_days_radiobutton_sunday = tk.Radiobutton()
         
         # Schedules Listbox construction
         grid_row += 1
@@ -133,9 +117,7 @@ class Septa_Gui_Frame(tk.Frame):
         our_frame.grid(row=grid_row, column=grid_column, padx=10, sticky=tk.W)
         
         # Create label for listbox
-        # our_label = tk.Label(our_frame, text=our_labeltext, justify = "left").pack()
         our_label = tk.Label(our_frame, text=our_labeltext)
-        #our_label.place(rely=0.0, relx=0.0, x=0, y=0, anchor=tk.NW)
         our_label.pack(side=tk.TOP, anchor=tk.W)
 
         # Create and link listbox and scrollbar
@@ -248,17 +230,51 @@ class Septa_Gui_Frame(tk.Frame):
                     route_id = row[0]
                     headsign = row[3]
                     if (route_id == selected_route_abbrev):
-                        trip_headsign_set.add(headsign)
+                        trip_headsign_set.add("To " + headsign)
             
             # Return to project root directory
             os.chdir('..')
             
-            # Load Direction Option Menu
-            var = tk.StringVar()
-            self.septa_direction_dropdown['menu'].delete(0, 'end')
-            for headsign in trip_headsign_set:
-                self.septa_direction_dropdown['menu'].add_command(
-                        label="To " + headsign, command=tk._setit(var, headsign))
+            # Handle Direction and label and dropdown
+            if (self.septa_direction_frame_label.winfo_exists()):
+                
+                # Create the label
+                self.septa_direction_frame_label.destroy()
+                self.septa_direction_frame_label = tk.Label(self.septa_routes_frame, text="Choose Direction:")
+                self.septa_direction_frame_label.pack(side=tk.TOP, anchor=tk.NE, padx=10)
+        
+                # Handle the dropdown
+                direction_choice = list(trip_headsign_set)
+                direction_default = tk.StringVar()
+                direction_default.set(direction_choice[0])
+
+                self.septa_direction_dropdown = tk.OptionMenu(
+                        self.septa_routes_frame, direction_default, *direction_choice)
+                self.septa_direction_dropdown.pack(side=tk.TOP, anchor=tk.E, padx=10)
+                
+                # Create label for day choices
+                self.septa_transport_label.destroy()
+                self.septa_transport_label = tk.Label(self.septa_routes_frame, text="Select Day:")
+                self.septa_transport_label.pack(side=tk.TOP, anchor=tk.W, padx=10, pady=(120, 0))
+        
+                # Add day choices radio buttons
+                self.septa_days_radiobutton_weekday.destroy()
+                self.septa_days_radiobutton_saturday.destroy()
+                self.septa_days_radiobutton_sunday.destroy()
+                
+                # TODO: Common function for this code
+                # TODO: command=self.<Function>LoadRoutesListbox
+                self.septa_days_radiobutton_weekday = tk.Radiobutton(
+                        self.septa_routes_frame, text="Weekday", variable=self.day_selection, value=0)
+                self.septa_days_radiobutton_weekday.pack(side=tk.TOP, anchor=tk.W)
+                
+                self.septa_days_radiobutton_saturday = tk.Radiobutton(
+                        self.septa_routes_frame, text="Saturday", variable=self.day_selection, value=1)
+                self.septa_days_radiobutton_saturday.pack(side=tk.TOP, anchor=tk.W)
+                
+                self.septa_days_radiobutton_sunday = tk.Radiobutton(
+                        self.septa_routes_frame, text="Sunday", variable=self.day_selection, value=2)
+                self.septa_days_radiobutton_sunday.pack(side=tk.TOP, anchor=tk.W)
 
             # TODO: Load Schedules (move to appropriate function)
             # Load Dummy Contents for now

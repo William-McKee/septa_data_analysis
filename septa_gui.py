@@ -19,7 +19,7 @@ class Septa_Gui_Frame(tk.Frame):
         parent = parent control
         directory_list = directory list containing bus then rail directory
         '''
-        # Save initial grame
+        # Save initial frame
         self.root = tk.Frame.__init__(self,parent)
         self.directory_list = directory_list
         self.parent = parent
@@ -58,22 +58,21 @@ class Septa_Gui_Frame(tk.Frame):
                                self.septa_routes_frame_label, 
                                self.septa_routes_listbox, 
                                self.septa_routes_scrollbar, 
-                               self.LoadSchedules,
+                               self.LoadDirectionalBox,
                                "Route Names:", grid_row, 0, 20, 40)
         
         # Create Direction label
         self.septa_direction_frame_label = tk.Label(self.septa_routes_frame, text="Choose Direction:")
         self.septa_direction_frame_label.pack(side=tk.TOP, anchor=tk.NE, padx=10)
         
-        # Create Direction dropdown
-        # TODO: Set to CSV file values for selected route
-        directions = ["North", "Northeast", "East", "Southeast", 
-                      "South", "Southwest", "West", "Northwest"]
+        # Create Direction dropdown (dummy loaded here; proper headings loaded for selected route)
+        DUMMY_DIRECTION = "Last Stop"
+        directions_dummy = [DUMMY_DIRECTION]
         direction_default = tk.StringVar()
-        direction_default.set("North")
+        direction_default.set(DUMMY_DIRECTION)
 
-        self.septa_default_value = "North"
-        self.septa_direction_dropdown = tk.OptionMenu(self.septa_routes_frame, direction_default, *directions)
+        self.septa_default_value = DUMMY_DIRECTION
+        self.septa_direction_dropdown = tk.OptionMenu(self.septa_routes_frame, direction_default, *directions_dummy)
         self.septa_direction_dropdown.pack(side=tk.TOP, anchor=tk.E, padx=10)
         
         # Create days radio button settings
@@ -213,9 +212,9 @@ class Septa_Gui_Frame(tk.Frame):
                 item_to_insert += item[index] + "  "
             listbox_control.insert("end", item_to_insert.strip())
             
-    def LoadSchedules(self, event):
+    def LoadDirectionalBox(self, event):
         '''
-        Load Schedule for selected train or bus line
+        Load Directional Drop Down Menu for selected train or bus line
         event = event object provided by Tkinter
         '''
         
@@ -232,8 +231,36 @@ class Septa_Gui_Frame(tk.Frame):
             index = int(w.curselection()[0])
             value = w.get(index)
             print('You selected item %d: "%s"' % (index, value))
+            
+            # Get headsign for selected route
+            trip_headsign_set = set()
+            if (self.transport_selection.get() == 0):                 # === Bus
+                os.chdir(self.directory_list[0])
+            else:                                                    # === Rail
+                os.chdir(self.directory_list[1])
+                
+            with open('trips.csv') as f:
+                reader = csv.reader(f)
+                next(reader, None) # Skip the headers
+                selected_route_abbrev = self.septa_routes_listbox.get(tk.ANCHOR)
+                selected_route_abbrev = selected_route_abbrev.split()[0]
+                for row in reader:
+                    route_id = row[0]
+                    headsign = row[3]
+                    if (route_id == selected_route_abbrev):
+                        trip_headsign_set.add(headsign)
+            
+            # Return to project root directory
+            os.chdir('..')
+            
+            # Load Direction Option Menu
+            var = tk.StringVar()
+            self.septa_direction_dropdown['menu'].delete(0, 'end')
+            for headsign in trip_headsign_set:
+                self.septa_direction_dropdown['menu'].add_command(label=headsign, command=tk._setit(var, headsign))
+            self.septa_direction_dropdown = tk.OptionMenu(self.septa_routes_frame, var, *trip_headsign_set)
 
-            # TODO: Load Schedules
+            # TODO: Load Schedules (move to appropriate function)
             # Load Dummy Contents for now
             items = ['January', 'February', 'March', 'April', 'May', 'June',
                      'July', 'August', 'September', 'October', 'November', 'December']

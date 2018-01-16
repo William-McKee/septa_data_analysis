@@ -257,8 +257,8 @@ class Septa_Gui_Frame(tk.Frame):
             var = tk.StringVar()
             self.septa_direction_dropdown['menu'].delete(0, 'end')
             for headsign in trip_headsign_set:
-                self.septa_direction_dropdown['menu'].add_command(label=headsign, command=tk._setit(var, headsign))
-            self.septa_direction_dropdown = tk.OptionMenu(self.septa_routes_frame, var, *trip_headsign_set)
+                self.septa_direction_dropdown['menu'].add_command(
+                        label="To " + headsign, command=tk._setit(var, headsign))
 
             # TODO: Load Schedules (move to appropriate function)
             # Load Dummy Contents for now

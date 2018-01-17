@@ -64,6 +64,12 @@ class Septa_Gui_Frame(tk.Frame):
         # Create Dummy Direction label
         self.septa_direction_frame_label = tk.Label()
         
+        # Create Dummy Direction option menu
+        dummy_option_var = tk.StringVar()
+        dummy_option_var.set("To Last Stop")
+        self.septa_direction_dropdown = tk.OptionMenu(
+                self.septa_routes_frame, dummy_option_var, "From First Stop")
+        
         # Create days radio button settings
         self.day_selection = tk.IntVar()
         self.day_selection.set(0)
@@ -203,7 +209,7 @@ class Septa_Gui_Frame(tk.Frame):
         # Clear previous contents
         self.septa_schedules_listbox.delete(0, "end")
         
-        # TODO: Cleaner resolution of this issue?
+        # Is this part of another callback?
         if (self.MAP_LOAD): # LoadMap invoked do not proceed here!
             # Clear Loaded Map
             self.MAP_LOAD = 0
@@ -243,11 +249,13 @@ class Septa_Gui_Frame(tk.Frame):
                 self.septa_direction_frame_label = tk.Label(self.septa_routes_frame, text="Choose Direction:")
                 self.septa_direction_frame_label.pack(side=tk.TOP, anchor=tk.NE, padx=10)
         
-                # Handle the dropdown
+                # Initialize dropdown options
                 direction_choice = list(trip_headsign_set)
                 direction_default = tk.StringVar()
                 direction_default.set(direction_choice[0])
 
+                # Create the dropdown
+                self.septa_direction_dropdown.destroy()
                 self.septa_direction_dropdown = tk.OptionMenu(
                         self.septa_routes_frame, direction_default, *direction_choice)
                 self.septa_direction_dropdown.pack(side=tk.TOP, anchor=tk.E, padx=10)
@@ -262,7 +270,6 @@ class Septa_Gui_Frame(tk.Frame):
                 self.septa_days_radiobutton_saturday.destroy()
                 self.septa_days_radiobutton_sunday.destroy()
                 
-                # TODO: Common function for this code
                 # TODO: command=self.<Function>LoadRoutesListbox
                 self.septa_days_radiobutton_weekday = tk.Radiobutton(
                         self.septa_routes_frame, text="Weekday", variable=self.day_selection, value=0)

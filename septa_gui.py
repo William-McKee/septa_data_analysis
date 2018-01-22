@@ -71,9 +71,7 @@ class Septa_Gui_Frame(tk.Frame):
                 self.septa_routes_frame, self.direction_chosen, "From First Stop")
         
         # Create days radio button settings
-        self.day_selection = tk.IntVar()
-        self.day_selection.set(0)
-        self.rb_day = tk.IntVar()
+        self.day_chosen = tk.StringVar()
         
         # Create Dummy label for day choices
         self.septa_transport_label = tk.Label()
@@ -262,7 +260,7 @@ class Septa_Gui_Frame(tk.Frame):
                 self.septa_direction_dropdown.destroy()
                 self.septa_direction_dropdown = tk.OptionMenu(
                         self.septa_routes_frame, self.direction_chosen, *direction_choice,
-                        command=self.UpdateDaySelection)
+                        command=self.UpdateDirectionSelection)
                 self.septa_direction_dropdown.pack(side=tk.TOP, anchor=tk.E, padx=10)
                 
                 # Create label for day choices
@@ -274,17 +272,18 @@ class Septa_Gui_Frame(tk.Frame):
                 self.septa_days_radiobutton_weekday.destroy()
                 self.septa_days_radiobutton_saturday.destroy()
                 self.septa_days_radiobutton_sunday.destroy()
+                self.day_chosen = tk.StringVar()
                 
                 self.septa_days_radiobutton_weekday = tk.Radiobutton(
-                        self.septa_routes_frame, text="Weekday", variable=self.rb_day, value=0)
+                        self.septa_routes_frame, text="Weekday", variable=self.day_chosen, value="Weekday")
                 self.septa_days_radiobutton_weekday.pack(side=tk.TOP, anchor=tk.W)
                 
                 self.septa_days_radiobutton_saturday = tk.Radiobutton(
-                        self.septa_routes_frame, text="Saturday", variable=self.rb_day, value=1)
+                        self.septa_routes_frame, text="Saturday", variable=self.day_chosen, value="Saturday")
                 self.septa_days_radiobutton_saturday.pack(side=tk.TOP, anchor=tk.W)
                 
                 self.septa_days_radiobutton_sunday = tk.Radiobutton(
-                        self.septa_routes_frame, text="Sunday", variable=self.rb_day, value=2)
+                        self.septa_routes_frame, text="Sunday", variable=self.day_chosen, value="Sunday")
                 self.septa_days_radiobutton_sunday.pack(side=tk.TOP, anchor=tk.W)
                 
                 # Add "Load Schedule" button
@@ -293,13 +292,12 @@ class Septa_Gui_Frame(tk.Frame):
                         self.septa_routes_frame, text="Load Schedule", command=self.LoadSchedule)
                 self.septa_load_schedule_button.pack(side=tk.TOP, anchor=tk.W, padx=10, pady=20)
                 
-    def UpdateDaySelection(self, value):
+    def UpdateDirectionSelection(self, value):
         '''
         Variable update when user selects direction
         value = User chosen direction
         '''
         self.direction_chosen = value
-
                 
     def LoadSchedule(self):
         '''
@@ -308,10 +306,13 @@ class Septa_Gui_Frame(tk.Frame):
         # Which direction is selected?
         print("You selected direction {}".format(self.direction_chosen))
         
+        # Which day is selected?
+        print("Schedule is for {}".format(str(self.day_chosen.get())))
+        
         # Clear previous contents
         self.septa_schedules_listbox.delete(0, "end")
         
-        # TODO: Load Schedules (move to appropriate function)
+        # TODO: Load Schedules
         # Load Dummy Contents for now
         items = ['January', 'February', 'March', 'April', 'May', 'June',
                  'July', 'August', 'September', 'October', 'November', 'December']

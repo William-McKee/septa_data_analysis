@@ -82,6 +82,9 @@ class Septa_Gui_Frame(tk.Frame):
         self.septa_days_radiobutton_saturday = tk.Radiobutton()
         self.septa_days_radiobutton_sunday = tk.Radiobutton()
         
+        # Create Dummy "Load Schedule" button
+        self.septa_load_schedule_button = tk.Button()
+        
         # Schedules Listbox construction
         grid_row += 1
         self.septa_schedules_frame = tk.Frame()
@@ -263,14 +266,13 @@ class Septa_Gui_Frame(tk.Frame):
                 # Create label for day choices
                 self.septa_transport_label.destroy()
                 self.septa_transport_label = tk.Label(self.septa_routes_frame, text="Select Day:")
-                self.septa_transport_label.pack(side=tk.TOP, anchor=tk.W, padx=10, pady=(120, 0))
+                self.septa_transport_label.pack(side=tk.TOP, anchor=tk.W, padx=10, pady=(50, 0))
         
                 # Add day choices radio buttons
                 self.septa_days_radiobutton_weekday.destroy()
                 self.septa_days_radiobutton_saturday.destroy()
                 self.septa_days_radiobutton_sunday.destroy()
                 
-                # TODO: command=self.<Function>LoadRoutesListbox
                 self.septa_days_radiobutton_weekday = tk.Radiobutton(
                         self.septa_routes_frame, text="Weekday", variable=self.day_selection, value=0)
                 self.septa_days_radiobutton_weekday.pack(side=tk.TOP, anchor=tk.W)
@@ -282,13 +284,25 @@ class Septa_Gui_Frame(tk.Frame):
                 self.septa_days_radiobutton_sunday = tk.Radiobutton(
                         self.septa_routes_frame, text="Sunday", variable=self.day_selection, value=2)
                 self.septa_days_radiobutton_sunday.pack(side=tk.TOP, anchor=tk.W)
+                
+                # Add "Load Schedule" button
+                self.septa_load_schedule_button.destroy()
+                self.septa_load_schedule_button = tk.Button(
+                        self.septa_routes_frame, text="Load Schedule", command=self.LoadSchedule)
+                self.septa_load_schedule_button.pack(side=tk.TOP, anchor=tk.W, padx=10, pady=20)
 
-            # TODO: Load Schedules (move to appropriate function)
-            # Load Dummy Contents for now
-            items = ['January', 'February', 'March', 'April', 'May', 'June',
-                     'July', 'August', 'September', 'October', 'November', 'December']
-            for item in items:
-                self.septa_schedules_listbox.insert("end", item)
+                
+    def LoadSchedule(self):
+        '''
+        Load Schedule for Selected Route, Direction, and Day of Week
+        '''
+        # TODO: Load Schedules (move to appropriate function)
+        # Load Dummy Contents for now
+        items = ['January', 'February', 'March', 'April', 'May', 'June',
+                 'July', 'August', 'September', 'October', 'November', 'December']
+        for item in items:
+            self.septa_schedules_listbox.insert("end", item)
+                
             
     def LoadMap(self, event):
         '''
